@@ -11,7 +11,7 @@ public class DB {
 		try {
 			
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/BoardGames","root", "103191");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/recommender","root", "somethingcl3v3r");
 		
 		} catch (SQLException e) {
 			e.printStackTrace();

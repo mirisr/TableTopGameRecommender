@@ -38,8 +38,8 @@ public class Handlers
         // IMPORTANT:
         // This is a raw Servlet, not a Servlet that has been configured
         // through a web.xml @WebServlet annotation, or anything similar.
-        handler.addServletWithMapping(GetGameByName.class, "/get-game-by-name/*");
-        handler.addServletWithMapping(GetAllGames.class, "/all-games"); // You need the /* at the end if you want a parameter
+        handler.addServletWithMapping(GetGameByName.class, "/games/*");
+        handler.addServletWithMapping(GetAllGames.class, "/games"); // You need the /* at the end if you want a parameter
 
         // Start things up!
         server.start();
@@ -85,10 +85,14 @@ public class Handlers
             GameAccessor accessor = new GameAccessor();
             List<Game> games = accessor.GetAllGames();
             StringBuilder str = new StringBuilder();
-            for (int i = 0; i < games.size(); i++) {
-            	str.append(games.get(i).toString());
+            str.append("{\n");
+            for (int i = 0; i < 4; i++) {
+            	str.append(games.get(i).getJson());
+            	if(i != games.size() - 1) {
+            		str.append(",\n");
+            	}
             }
-            
+            str.append("}");
             
             response.getWriter().println(str.toString());
         }

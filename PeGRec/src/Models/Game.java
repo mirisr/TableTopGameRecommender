@@ -52,6 +52,33 @@ public class Game {
 				+ "\nCategories: " + categories;
 	}
 	
+	public String getJson() {
+		String categ;
+		
+		categ = "[";
+		for(int i = 0; i < categories.size(); i++) {
+			categ += "\"" + categories.get(i) + "\", ";
+			if(i != categories.size() - 1) {
+				categ += ", ";
+			}
+		}
+		categ += "]";
+		
+		return "\"game\": {\n" +
+					"\t\"id\": \"" + id + "\",\n" +
+					"\t\"title\": \"" + title + "\",\n" +
+					"\t\"year\": \"" + year + "\",\n" +
+					"\t\"avg_rating\": \"" + avg_rating + "\",\n" +
+					"\t\"no_ratings\": \"" + no_ratings + "\",\n" +
+					"\t\"complexity\": \"" + complexity + "\",\n" +
+					"\t\"min_players\": \"" + min_players + "\",\n" +
+					"\t\"max_players\": \"" + max_players + "\",\n" +
+					"\t\"min_time\": \"" + min_time + "\",\n" +
+					"\t\"max_time\": \"" + max_time + "\",\n" +
+					"\t\"categories\": \"" + categ + "\"\n" +
+				"}";
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 	    if (obj == null) {
