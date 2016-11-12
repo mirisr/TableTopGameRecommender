@@ -1,1 +1,69 @@
-<p>This is the partial for view 1.</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>TableTop</title>
+
+    <!-- Bootstrap Core CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Google Fonts URL -->
+   <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link href="../assets/TableTop.css" rel="stylesheet">
+
+</head>
+
+     <!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+    <!-- jQuery -->
+
+    <script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<body ng-app="recommender" ng-controller='profile'>
+
+    <div class="container">
+
+        <div class="header">
+        <h1>Create Your Profile</h1> <input type="login" ng-click="" value="Sign-Up/Login" />
+        </div>
+
+
+        <div class ="center">
+            <form id = "formContent">
+                <input type="text" id="firstName" class="form-control" ng-model="user.firstName" placeholder = "First Name">
+                <input type="text" id="lastName" class="form-control" ng-model="user.lastName" placeholder = "Last Name">
+                <input type="email" id="email" class="form-control" ng-model="user.email" placeholder = "Email">
+                <input type="text" id="username" class="form-control" ng-model="user.username" placeholder = "Username">
+                <input type="text" id="password" class="form-control" ng-model="user.password" placeholder = "Password">
+                <input type="button" ng-click="user.createProfile()" value="Continue" />
+                <!-- <input type="submit" ng-click="update(user)" value="Save" /> -->
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+
+</html>
