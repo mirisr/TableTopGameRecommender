@@ -16,10 +16,16 @@ public class Game {
 	public int min_time;
 	public int max_time;
 	public List<String> categories;
-
+//	public List<String> mechanics;
+//	public List<String> types;
+	public String description;
+	public String image_link;
+	
 	public Game(int id, String title, int year, float avg_rating, int no_ratings,
 			float complexity, int min_players, int max_players,
-			int min_time, int max_time, List<String> categories) {
+			int min_time, int max_time, List<String> categories, 
+//			List<String> mechanics, List<String> types,
+			String description, String image_link) {
 		
 		this.id = id;
 		this.title = title;
@@ -32,6 +38,10 @@ public class Game {
 		this.min_time = min_time;
 		this.max_time = max_time;
 		this.categories = categories;
+//		this.mechanics = mechanics;
+//		this.types = types;
+		this.description = description;
+		this.image_link = image_link;
 	}
 	
 	public Game() {

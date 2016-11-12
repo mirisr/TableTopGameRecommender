@@ -43,7 +43,7 @@ public class GameAccessor {
 		PreparedStatement stmt = null;
 		try {
 			
-			String query = "select * from games limit 20000";
+			String query = "select * from games order by gbg_overall_rank limit 5000";
 			stmt = db.connection.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
 			games = CreateGames(rs);
@@ -56,9 +56,21 @@ public class GameAccessor {
 				stmt.setInt(1, game.id);
 				rs = stmt.executeQuery();
 				game = AddCategoriesToGame(rs, game);
+				//System.out.println("Finished adding categories.");
+				
+//				query = "select distinct(mechanic) from mechanics where id = ? ";
+//				stmt = db.connection.prepareStatement(query);
+//				stmt.setInt(1, game.id);
+//				rs = stmt.executeQuery();
+//				game = AddMechanicsToGame(rs, game);
+//				//System.out.println("Finished adding mechanics.");
+//				
+//			    query = "select distinct(type) from types where id = ? ";
+//				stmt = db.connection.prepareStatement(query);
+//				stmt.setInt(1, game.id);
+//				rs = stmt.executeQuery();
+//				game = AddTypesToGame(rs, game);
 			}
-			
-			
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -144,6 +156,9 @@ public class GameAccessor {
 				game.max_players = rs.getInt("max_players");
 				game.min_time = rs.getInt("min_time");
 				game.max_time = rs.getInt("max_time");
+				game.description = rs.getString("description");
+				game.image_link = rs.getString("image_link");
+				
 				games.add(game);
 			}
 			
@@ -168,5 +183,33 @@ public class GameAccessor {
 		return game;
 	}
 	
-	
+//	private Game AddMechanicsToGame(ResultSet rs, Game game) {
+//		List<String>mechanics = new ArrayList<String>();
+//		try {
+//			
+//			while(rs.next()) {
+//				mechanics.add(rs.getString("mechanic"));
+//			}
+//			
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		game.mechanics = mechanics;
+//		return game;
+//	}
+//	
+//	private Game AddTypesToGame(ResultSet rs, Game game) {
+//		List<String>types = new ArrayList<String>();
+//		try {
+//			
+//			while(rs.next()) {
+//				types.add(rs.getString("type"));
+//			}
+//			
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		game.types = types;
+//		return game;
+//	}
 }
