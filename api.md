@@ -22,7 +22,7 @@
 - GET /profiles/{profiles}/games - get recommended games for the profile
 - POST /profiles-create/{username}/{password} - create (IMPLEMENTED)
 - PUT /profiles/{profile} - update
-- DELETE /profiles/{profile} - destroy
+- DELETE /profiles-games-remove/{userId}/{gameId} - destroy (IMPLEMENTED)
 - GET /profiles-verify/{username}/{password} - returns -1 if not found, otherwise the user ID(IMPLEMENTED)
 - GET /profiles-find/{username} - returns -1 if username is not found, other the userID (IMPLEMENTED)
 
