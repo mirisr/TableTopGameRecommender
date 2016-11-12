@@ -86,7 +86,7 @@ public class Handlers
             List<Game> games = accessor.GetAllGames();
             StringBuilder str = new StringBuilder();
             str.append("{\n");
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < games.size(); i++) {
             	str.append(games.get(i).getJson());
             	if(i != games.size() - 1) {
             		str.append(",\n");

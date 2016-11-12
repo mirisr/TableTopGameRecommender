@@ -15,7 +15,7 @@ public class Game {
 	public int max_players;
 	public int min_time;
 	public int max_time;
-	public List<String>categories;
+	public List<String> categories;
 
 	public Game(int id, String title, int year, float avg_rating, int no_ratings,
 			float complexity, int min_players, int max_players,
@@ -57,7 +57,7 @@ public class Game {
 		
 		categ = "[";
 		for(int i = 0; i < categories.size(); i++) {
-			categ += "\"" + categories.get(i) + "\", ";
+			categ += "\"" + categories.get(i) + "\"";
 			if(i != categories.size() - 1) {
 				categ += ", ";
 			}
@@ -75,7 +75,7 @@ public class Game {
 					"\t\"max_players\": \"" + max_players + "\",\n" +
 					"\t\"min_time\": \"" + min_time + "\",\n" +
 					"\t\"max_time\": \"" + max_time + "\",\n" +
-					"\t\"categories\": \"" + categ + "\"\n" +
+					"\t\"categories\": " + categ + "\n" +
 				"}";
 	}
 	
