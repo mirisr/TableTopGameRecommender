@@ -1,4 +1,4 @@
-angular.module('myApp.server')
+angular.module('recommender.server')
 
 .factory('Profile', function($resource) {
     return $resource('/api/profiles/:id', {}, {
