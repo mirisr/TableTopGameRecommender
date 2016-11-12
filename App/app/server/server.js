@@ -1,7 +1,7 @@
 // Module for all server communication
 'use strict';
 
-angular.module('myApp.server', [
+angular.module('recommender.server', [
     'ngRoute'
 ])
 

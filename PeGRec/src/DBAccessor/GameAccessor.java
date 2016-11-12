@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import Computation.GameRanker;
 import Models.COF;
 import Models.CandidateGame;
 import Models.Game;
@@ -83,8 +84,7 @@ public class GameAccessor {
 	public int VerifyUser(String username, String password) {
 		int userId = -1;
 		PreparedStatement stmt = null;
-		try {
-			
+		try {			
 			String query = "select * from users where username = ? and password = ?";
 			stmt = db.connection.prepareStatement(query);
 			stmt.setString(1, username);
@@ -125,6 +125,51 @@ public class GameAccessor {
 		}
 		
 		return candidateGames;
+	}
+	
+	public List<CandidateGame> GetTopN(int userId, int desId, int n) {
+		List<Game> profileGames = null;
+		PreparedStatement stmt = null;
+		try {
+			String query = "select * from games g where g.id in (select game_id from profiles where user_id = ?);";
+			stmt = db.connection.prepareStatement(query);
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			
+			profileGames = CreateGames(rs);
+			Game desGame = null;
+			for(Iterator<Game> i = profileGames.iterator(); i.hasNext(); ) {
+			    Game game = i.next();
+			    query = "select distinct(category) from categories where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddCategoriesToGame(rs, game);
+				if(game.id == desId) {
+					desGame = game;
+				}
+			}
+//			
+//			query = "select * from games where id = ?;";
+//			stmt = db.connection.prepareStatement(query);
+//			stmt.setInt(1, userId);
+//			rs = stmt.executeQuery();
+
+
+			
+			GameRanker gr = new GameRanker(this, profileGames, desGame);
+			return gr.GetTopNGames(n);
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		finally {
+			db.safeClose(stmt);
+		}
+		
+		return null;
 	}
 	
 	public List<Game> GetAllGames() {
