@@ -40,12 +40,11 @@ public class Handlers
         // IMPORTANT:
         // This is a raw Servlet, not a Servlet that has been configured
         // through a web.xml @WebServlet annotation, or anything similar.
-        handler.addServletWithMapping(GetGameByName.class, "/games/*");
-        handler.addServletWithMapping(GetAllGames.class, "/games"); // You need the /* at the end if you want a parameter
-
+        //handler.addServletWithMapping(GetGameByName.class, "/games/*");
+        handler.addServletWithMapping(GetAllGames.class, "/games"); // 
         handler.addServletWithMapping(CreateUser.class, "/user_create/*"); // user/username/password
         handler.addServletWithMapping(VerifyUser.class, "/user_verify/*"); // user/username/password
-        handler.addServletWithMapping(FindUser.class, "/user_find/*"); // user_find/user
+        handler.addServletWithMapping(FindUser.class, "/user_find/*"); // user_find/username
         handler.addServletWithMapping(GetTopN.class, "/top_n/*"); // top_n/user_id/des_game/n
 
         // Start things up!

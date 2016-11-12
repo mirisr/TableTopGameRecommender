@@ -145,6 +145,20 @@ public class GameAccessor {
 				stmt.setInt(1, game.id);
 				rs = stmt.executeQuery();
 				game = AddCategoriesToGame(rs, game);
+				
+				query = "select distinct(mechanic) from mechanics where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddMechanicsToGame(rs, game);
+				//System.out.println("Finished adding mechanics.");
+				
+			    query = "select distinct(type) from types where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddTypesToGame(rs, game);
+				
 				if(game.id == desId) {
 					desGame = game;
 				}
@@ -235,6 +249,19 @@ public class GameAccessor {
 			stmt.setInt(1, game.id);
 			rs = stmt.executeQuery();
 			game = AddCategoriesToGame(rs, game);
+			
+			query = "select distinct(mechanic) from mechanics where id = ? ";
+			stmt = db.connection.prepareStatement(query);
+			stmt.setInt(1, game.id);
+			rs = stmt.executeQuery();
+			game = AddMechanicsToGame(rs, game);
+			//System.out.println("Finished adding mechanics.");
+			
+		    query = "select distinct(type) from types where id = ? ";
+			stmt = db.connection.prepareStatement(query);
+			stmt.setInt(1, game.id);
+			rs = stmt.executeQuery();
+			game = AddTypesToGame(rs, game);
 			
 		}
 		catch (Exception e) {
