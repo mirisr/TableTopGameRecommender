@@ -40,7 +40,7 @@ public class Handlers
         // through a web.xml @WebServlet annotation, or anything similar.
         handler.addServletWithMapping(GetGameByName.class, "/games/*");
         handler.addServletWithMapping(GetAllGames.class, "/games"); // You need the /* at the end if you want a parameter
-
+        handler.addServletWithMapping(CreateUser.class, "/user/*"); // user/username/password
         // Start things up!
         server.start();
 
@@ -49,6 +49,27 @@ public class Handlers
         // See
         // http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#join()
         server.join();
+    }
+    
+    @SuppressWarnings("serial")
+    public static class CreateUser extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            String username = splitInfo[1];
+            String password = splitInfo[2];
+            
+            GameAccessor accessor = new GameAccessor();
+            
+            response.getWriter().println("stuff");
+        }
     }
 
     @SuppressWarnings("serial")

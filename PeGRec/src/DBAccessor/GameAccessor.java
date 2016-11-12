@@ -17,6 +17,48 @@ public class GameAccessor {
 		db = new DB();
 	}
 	
+	// Creates User into Database - Assumes the user does not already exist in the DB
+	// If successful returns the newly created userID. else return -1
+	public int CreateUser(String username, String password) {
+		return -1;
+	}
+	
+	// Check to see if the User Exists
+	// If user exists, return userID
+	// else return -1
+	public int UserExists(String username) {
+		return -1;
+	}
+	
+	// Verifies user credentials
+	// If the user credentials are successful return userID
+	// else return -1
+	public int VerifyUser(String username, String password) {
+		int userId = -1;
+		PreparedStatement stmt = null;
+		try {
+			
+			String query = "select * from users where username = ? and password = ?";
+			stmt = db.connection.prepareStatement(query);
+			stmt.setString(1, username);
+			stmt.setString(2,  password);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				userId = rs.getInt("id");
+			}
+			
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		finally {
+			db.safeClose(stmt);
+		}
+		return userId;
+	}
+	
 	public List<CandidateGame> GetCandidateGames(List<Game>profile, Game designatedGame) {
 		List<Game> allGames = GetAllGames();
 		List<CandidateGame> candidateGames = new ArrayList<CandidateGame>();
