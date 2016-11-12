@@ -68,7 +68,7 @@ public class GameAccessor {
 		
 		PreparedStatement preparedStmt = null;
 		try {
-				String query = "delete from profiles where user_id = ? and game_id = ?";
+				String query = "insert into profiles values (?, ?)";
 				preparedStmt = db.connection.prepareStatement(query);
 				preparedStmt.setInt (1, userId);
 				preparedStmt.setInt (2, gameId);

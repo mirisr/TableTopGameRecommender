@@ -64,28 +64,6 @@ public class GameAccessor {
 		return profileGames;
 	}
 	
-	public void RemoveGameFromProfile(int userId, int gameId) {
-		
-		PreparedStatement preparedStmt = null;
-		try {
-				String query = "delete from profiles where user_id = ? and game_id = ?";
-				preparedStmt = db.connection.prepareStatement(query);
-				preparedStmt.setInt (1, userId);
-				preparedStmt.setInt (2, gameId);
-				preparedStmt.execute();
-				db.safeClose(preparedStmt);
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
-		finally {
-			db.safeClose(preparedStmt);
-			
-		}
-	}
-	
 	public void AddGameToProfile(int userId, int gameId) {
 		
 		PreparedStatement preparedStmt = null;
