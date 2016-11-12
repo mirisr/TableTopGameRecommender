@@ -115,8 +115,8 @@ public class Handlers
             String user = splitInfo[1];
             
             GameAccessor accessor = new GameAccessor();
-            
-            response.getWriter().println(accessor.UserExists(user));
+            int userId = accessor.UserExists(user);
+            response.getWriter().println("{\"userId\":"+ userId + "}");
         }
     }
     

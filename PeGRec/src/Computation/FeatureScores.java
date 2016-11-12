@@ -16,12 +16,21 @@ public class FeatureScores {
 	
 	public List<CandidateGame>candidateGames;
 	private float[][] cofs = new float[8][8];
-	private List<String> categoryNames = new ArrayList<String>();
+	private float[][] mcofs = new float[51][51];
+	private float[][] tcofs = new float[84][84];
 	
-	public FeatureScores(List<CandidateGame> candidateGames, List<COF>rawCOFs) {
+	private List<String> categoryNames = new ArrayList<String>();
+	private List<String> mechNames = new ArrayList<String>();
+	private List<String> typeNames = new ArrayList<String>();
+	
+	public FeatureScores(List<CandidateGame> candidateGames, List<COF>rawCOFs, List<COF>rawMCOFs, List<COF>rawTCOFs) {
 		this.candidateGames = candidateGames;
 		LoadCategoryNames();
-		LoadCOFs(rawCOFs);
+		LoadMechNames();
+		LoadTypeNames();
+		LoadCOFs(rawCOFs, categoryNames, cofs);
+		LoadCOFs(rawMCOFs, mechNames, mcofs);
+		LoadCOFs(rawTCOFs, typeNames, tcofs);
 	}
 	
 	/*
@@ -137,6 +146,85 @@ public class FeatureScores {
 		    
 		}
 	}
+	
+	
+	private void CalculateMechanics(List<Game>profile, CandidateGame candidateGame, Tuple<Float,Float>minmax) {
+		candidateGame.mechanicScore = 0;
+		int categoriesInCandidateGame = candidateGame.game.mechanics.size();
+		//For every profile Game
+		for(Iterator<Game> i = profile.iterator(); i.hasNext(); ) {
+		    Game profileGame = i.next();
+		    int categoriesInProfileGame = profileGame.mechanics.size();
+		    
+		    //Get every set of categories between the profile game and the candidateGame
+		    Set<Tuple<String,String>>Z = new HashSet<Tuple<String,String>>();
+		    for(Iterator<String> p = profileGame.mechanics.iterator(); p.hasNext(); ) {
+			    String profileCategory= p.next();
+			    for(Iterator<String> c = candidateGame.game.mechanics.iterator(); c.hasNext(); ) {
+				    String candidateCategory= c.next();
+				    Tuple<String,String> tuple = new Tuple<String,String>(profileCategory, candidateCategory);
+				    Z.add(tuple);
+			    }
+		    }
+		    float COFSums = 0;
+		    
+		    //Find SUM of the COFS for each set in Z
+		    for(Iterator<Tuple<String,String>> t = Z.iterator(); t.hasNext(); ) {
+			    Tuple tuple= t.next();
+			    int row = mechNames.indexOf(tuple.getLeft());
+			    int col = mechNames.indexOf(tuple.getRight());
+			    COFSums += mcofs[row][col];
+		    }
+		    
+		    float valueFromProfileGame = COFSums / (categoriesInCandidateGame * categoriesInProfileGame);
+		    candidateGame.mechanicScore += valueFromProfileGame;
+		    
+		    if (candidateGame.mechanicScore < minmax.getLeft())
+				minmax.setLeft(candidateGame.mechanicScore);
+			if (candidateGame.mechanicScore > minmax.getRight())
+				minmax.setRight(candidateGame.mechanicScore);
+		    
+		}
+	}
+	
+	private void CalculateTypes(List<Game>profile, CandidateGame candidateGame, Tuple<Float,Float>minmax) {
+		candidateGame.typeScore = 0;
+		int categoriesInCandidateGame = candidateGame.game.types.size();
+		//For every profile Game
+		for(Iterator<Game> i = profile.iterator(); i.hasNext(); ) {
+		    Game profileGame = i.next();
+		    int categoriesInProfileGame = profileGame.types.size();
+		    
+		    //Get every set of categories between the profile game and the candidateGame
+		    Set<Tuple<String,String>>Z = new HashSet<Tuple<String,String>>();
+		    for(Iterator<String> p = profileGame.types.iterator(); p.hasNext(); ) {
+			    String profileCategory= p.next();
+			    for(Iterator<String> c = candidateGame.game.types.iterator(); c.hasNext(); ) {
+				    String candidateCategory= c.next();
+				    Tuple<String,String> tuple = new Tuple<String,String>(profileCategory, candidateCategory);
+				    Z.add(tuple);
+			    }
+		    }
+		    float COFSums = 0;
+		    
+		    //Find SUM of the COFS for each set in Z
+		    for(Iterator<Tuple<String,String>> t = Z.iterator(); t.hasNext(); ) {
+			    Tuple tuple= t.next();
+			    int row = typeNames.indexOf(tuple.getLeft());
+			    int col = typeNames.indexOf(tuple.getRight());
+			    COFSums += tcofs[row][col];
+		    }
+		    
+		    float valueFromProfileGame = COFSums / (categoriesInCandidateGame * categoriesInProfileGame);
+		    candidateGame.mechanicScore += valueFromProfileGame;
+		    
+		    if (candidateGame.mechanicScore < minmax.getLeft())
+				minmax.setLeft(candidateGame.mechanicScore);
+			if (candidateGame.mechanicScore > minmax.getRight())
+				minmax.setRight(candidateGame.mechanicScore);
+		    
+		}
+	}
 	/*
 	 * Calculated all of the scores
 	 * 
@@ -168,10 +256,13 @@ public class FeatureScores {
 	
 	public void CalculateScoresAgainstProfileGames(List<Game>profile) {
 		Tuple<Float,Float>catMinMax = new Tuple<Float,Float>(Float.MAX_VALUE,Float.MIN_VALUE);
-		
+		Tuple<Float,Float>mechMinMax = new Tuple<Float,Float>(Float.MAX_VALUE,Float.MIN_VALUE);
+		Tuple<Float,Float>typeMinMax = new Tuple<Float,Float>(Float.MAX_VALUE,Float.MIN_VALUE);
 		for(Iterator<CandidateGame> i = this.candidateGames.iterator(); i.hasNext(); ) {
 		    CandidateGame game = i.next();
 		    CalculateCategories(profile, game, catMinMax);
+		    CalculateMechanics(profile, game, mechMinMax);
+		    CalculateTypes(profile, game, typeMinMax);
 		}
 		
 		//Normalize scores
@@ -180,18 +271,29 @@ public class FeatureScores {
 		    game.categoryScore = (game.categoryScore - catMinMax.getLeft()) / (catMinMax.getRight() - catMinMax.getLeft()); 
 		    if(Float.isNaN(game.categoryScore))
 		    	game.categoryScore = 0;
+		    
+		    game.mechanicScore = (game.mechanicScore - mechMinMax.getLeft()) / (mechMinMax.getRight() - mechMinMax.getLeft()); 
+		    if(Float.isNaN(game.mechanicScore))
+		    	game.mechanicScore = 0;
+		    
+		    game.typeScore = (game.typeScore - typeMinMax.getLeft()) / (typeMinMax.getRight() - typeMinMax.getLeft()); 
+		    if(Float.isNaN(game.typeScore))
+		    	game.typeScore = 0;
 		    game.CalculateBasicOverallScore();
 		}
 	}
 	
-	private void LoadCOFs(List<COF>rawCOFs) {
+	
+	private void LoadCOFs(List<COF>rawCOFs, List<String>names, float[][] _cofs) {
 		for(Iterator<COF> i = rawCOFs.iterator(); i.hasNext(); ) {
 		    COF cof = i.next();
-		    int row = categoryNames.indexOf(cof.category1);
-		    int col = categoryNames.indexOf(cof.category2);
-		    cofs[row][col] = cof.cof;
+		    int row = names.indexOf(cof.category1);
+		    int col = names.indexOf(cof.category2);
+		    _cofs[row][col] = cof.cof;
 		}
 	}
+	
+	
 	
 	private void LoadCategoryNames() {
 		categoryNames.add("Strategy");
@@ -202,5 +304,31 @@ public class FeatureScores {
 		categoryNames.add("Abstract");
 		categoryNames.add("Party");
 		categoryNames.add("Children's");
+	}
+	
+	private void LoadMechNames() {
+		String[] mechArray = {"Acting","Action / Movement Programming","Action Point Allowance System","Area Control / Area Influence","Area Enclosure","Area Movement","Area-Impulse",
+		   "Auction/Bidding","Betting/Wagering","Campaign / Battle Card Driven","Card Drafting","Chit-Pull System",
+		   "Co-operative Play","Commodity Speculation","Crayon Rail System","Deck / Pool Building","Dice Rolling",
+		   "Grid Movement","Hand Management","Hex-and-Counter","Line Drawing","Memory","Modular Board","Paper-and-Pencil",
+		   "Partnerships","Pattern Building","Pattern Recognition","Pick-up and Deliver","Player Elimination",
+		   "Point to Point Movement","Press Your Luck","Rock-Paper-Scissors","Role Playing","Roll / Spin and Move",
+		   "Route/Network Building","Secret Unit Deployment","Set Collection","Simulation","Simultaneous Action Selection",
+		   "Singing","Stock Holding","Storytelling","Take That","Tile Placement","Time Track","Trading",
+		   "Trick-taking","Variable Phase Order","Variable Player Powers","Voting","Worker Placement"};
+		mechNames = Arrays.asList(mechArray);
+	}
+	
+	private void LoadTypeNames() {
+		String[] typeArray = {"Abstract Strategy","Action / Dexterity","Adventure","Age of Reason","American Civil War",
+		"American Indian Wars","American Revolutionary War","American West","Ancient","Animals","Arabian","Aviation / Flight","Bluffing","Book",
+		"Card Game","Children's Game","City Building","Civil War","Civilization","Collectible Components","Comic Book / Strip","Deduction",
+		"Dice","Economic","Educational","Electronic","Environmental","Expansion for Base-game","Exploration","Fan Expansion","Fantasy","Farming","Fighting",
+		"Game System","Horror","Humor","Industry / Manufacturing","Korean War","Mafia","Math","Mature / Adult","Maze","Medical","Medieval","Memory",
+		"Miniatures","Modern Warfare","Movies / TV / Radio theme","Murder/Mystery","Music","Mythology","Napoleonic","Nautical","Negotiation","Novel-based","Number",
+		"Party Game","Pike and Shot","Pirates","Political","Post-Napoleonic","Prehistoric","Print & Play","Puzzle","Racing","Real-time","Religious","Renaissance",
+		"Science Fiction","Space Exploration","Spies/Secret Agents","Sports","Territory Building","Trains","Transportation","Travel","Trivia","Video Game Theme","Vietnam War",
+		"Wargame","Word Game","World War I","World War II","Zombies"};
+		typeNames = Arrays.asList(typeArray);
 	}
 }

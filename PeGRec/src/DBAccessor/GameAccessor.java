@@ -147,18 +147,18 @@ public class GameAccessor {
 				game = AddCategoriesToGame(rs, game);
 				//System.out.println("Finished adding categories.");
 				
-//				query = "select distinct(mechanic) from mechanics where id = ? ";
-//				stmt = db.connection.prepareStatement(query);
-//				stmt.setInt(1, game.id);
-//				rs = stmt.executeQuery();
-//				game = AddMechanicsToGame(rs, game);
-//				//System.out.println("Finished adding mechanics.");
-//				
-//			    query = "select distinct(type) from types where id = ? ";
-//				stmt = db.connection.prepareStatement(query);
-//				stmt.setInt(1, game.id);
-//				rs = stmt.executeQuery();
-//				game = AddTypesToGame(rs, game);
+				query = "select distinct(mechanic) from mechanics where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddMechanicsToGame(rs, game);
+				//System.out.println("Finished adding mechanics.");
+				
+			    query = "select distinct(type) from types where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddTypesToGame(rs, game);
 			}
 		}
 		catch (Exception e) {
@@ -228,6 +228,58 @@ public class GameAccessor {
 		return cofs;
 		
 	}
+	
+	public List<COF> GetMCOFs() {
+		List<COF> cofs = new ArrayList<COF>();
+		PreparedStatement stmt = null;
+		try {
+			
+			String query = "select * from mcof";
+			stmt = db.connection.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				COF cof = new COF();
+				cof.category1= rs.getString("mech1");
+				cof.category2 = rs.getString("mech2");
+				cof.cof = rs.getFloat("cof");
+				cofs.add(cof);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			db.safeClose(stmt);
+		}
+		return cofs;
+		
+	}
+	
+	public List<COF> GetTCOFs() {
+		List<COF> cofs = new ArrayList<COF>();
+		PreparedStatement stmt = null;
+		try {
+			
+			String query = "select * from tcof";
+			stmt = db.connection.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				COF cof = new COF();
+				cof.category1= rs.getString("type1");
+				cof.category2 = rs.getString("type2");
+				cof.cof = rs.getFloat("cof");
+				cofs.add(cof);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			db.safeClose(stmt);
+		}
+		return cofs;
+		
+	}
  	
 	private List<Game> CreateGames(ResultSet rs) {
 		List<Game> games = new ArrayList<Game>();
@@ -272,33 +324,33 @@ public class GameAccessor {
 		return game;
 	}
 	
-//	private Game AddMechanicsToGame(ResultSet rs, Game game) {
-//		List<String>mechanics = new ArrayList<String>();
-//		try {
-//			
-//			while(rs.next()) {
-//				mechanics.add(rs.getString("mechanic"));
-//			}
-//			
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		game.mechanics = mechanics;
-//		return game;
-//	}
-//	
-//	private Game AddTypesToGame(ResultSet rs, Game game) {
-//		List<String>types = new ArrayList<String>();
-//		try {
-//			
-//			while(rs.next()) {
-//				types.add(rs.getString("type"));
-//			}
-//			
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		game.types = types;
-//		return game;
-//	}
+	private Game AddMechanicsToGame(ResultSet rs, Game game) {
+		List<String>mechanics = new ArrayList<String>();
+		try {
+			
+			while(rs.next()) {
+				mechanics.add(rs.getString("mechanic"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		game.mechanics = mechanics;
+		return game;
+	}
+	
+	private Game AddTypesToGame(ResultSet rs, Game game) {
+		List<String>types = new ArrayList<String>();
+		try {
+			
+			while(rs.next()) {
+				types.add(rs.getString("type"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		game.types = types;
+		return game;
+	}
 }

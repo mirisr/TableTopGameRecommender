@@ -4,8 +4,6 @@
 <fullyQualifiedTypeName name="java.sql.DriverManager"/>
 <fullyQualifiedTypeName name="java.sql.Statement"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="Models.Game"/>
 <fullyQualifiedTypeName name="DBAccessor.GameAccessor"/>
 <fullyQualifiedTypeName name="Computation.GameRanker"/>
 <fullyQualifiedTypeName name="java.util.Set"/>
@@ -19,4 +17,6 @@
 <fullyQualifiedTypeName name="java.util.Collections"/>
 <fullyQualifiedTypeName name="Models.CandidateGame"/>
 <fullyQualifiedTypeName name="javax.swing.event.ListSelectionEvent"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="Models.Game"/>
 </qualifiedTypeNameHistroy>

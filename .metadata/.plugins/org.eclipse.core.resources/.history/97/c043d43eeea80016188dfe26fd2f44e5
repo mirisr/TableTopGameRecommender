@@ -1,0 +1,50 @@
+package Computation;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.swing.event.ListSelectionEvent;
+
+import DBAccessor.GameAccessor;
+import Models.COF;
+import Models.CandidateGame;
+import Models.Game;
+
+public class GameRanker {
+	
+	private FeatureScores featureScores;
+	private List<CandidateGame> candidateGames;
+	private GameAccessor accessor;
+	private List<Game>profile;
+	private Game designatedGame;
+	
+	public GameRanker(GameAccessor accessor, List<Game>profile, Game designatedGame) {
+		this.accessor = accessor;
+		this.profile = profile;
+		this.designatedGame = designatedGame;
+		
+		LoadCandidateGames();
+		List<COF>cofs = accessor.GetCOFs();
+		featureScores = new FeatureScores(candidateGames, cofs);
+	}
+	
+	
+	public List<CandidateGame> GetTopNGames(int n) {
+		//Get scores for each of the features
+		featureScores.CalculateScoresAgainstDesignatedGame(this.designatedGame);
+		featureScores.CalculateScoresAgainstProfileGames(this.profile);
+		candidateGames = featureScores.candidateGames;
+		Collections.sort(candidateGames, new Comparator<CandidateGame>() {
+			  public int compare(CandidateGame c1, CandidateGame c2) {
+				  return Float.compare(c1.overallScore, c2.overallScore);
+			  }});
+		Collections.reverse(candidateGames);
+		return candidateGames.subList(0, n);
+	}
+	
+	private void LoadCandidateGames() {
+		candidateGames = accessor.GetCandidateGames(profile, designatedGame);
+	}
+
+}

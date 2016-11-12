@@ -18,6 +18,7 @@ public class GameRanker {
 	private GameAccessor accessor;
 	private List<Game>profile;
 	private Game designatedGame;
+	
 	public GameRanker(GameAccessor accessor, List<Game>profile, Game designatedGame) {
 		this.accessor = accessor;
 		this.profile = profile;
@@ -25,7 +26,9 @@ public class GameRanker {
 		
 		LoadCandidateGames();
 		List<COF>cofs = accessor.GetCOFs();
-		featureScores = new FeatureScores(candidateGames, cofs);
+		List<COF>mcofs = accessor.GetMCOFs();
+		List<COF>tcofs = accessor.GetTCOFs();
+		featureScores = new FeatureScores(candidateGames, cofs, mcofs, tcofs);
 	}
 	
 	
@@ -39,7 +42,7 @@ public class GameRanker {
 				  return Float.compare(c1.overallScore, c2.overallScore);
 			  }});
 		Collections.reverse(candidateGames);
-		return candidateGames.subList(0, n-1);
+		return candidateGames.subList(0, n);
 	}
 	
 	private void LoadCandidateGames() {
