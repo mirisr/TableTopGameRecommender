@@ -28,6 +28,9 @@ public class PeGRec {
 			System.out.println(game.toString());
 			System.out.println("-------------------------------");
 		}
+		
+		Game g = new Game();
+		System.out.println(g.getJson());
 	}
 	
     private List<Game> CreateProfile_Eric_2() {
