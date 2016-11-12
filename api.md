@@ -14,7 +14,7 @@
 - GET /categories/{category}/games - get all games in category
 - GET /profiles/{profile}/games - get games for the profile
 - POST /profiles/{profile}/games - add to profile's games
-- GET /games-top-n/{userId}/{designatedGameId}/{n} - returns top n recommendations based on user ID and designated Game ID
+- GET /games-top-n/{userId}/{designatedGameId}/{n} - (IMPLEMENTED) returns top n recommendations based on user ID and designated Game ID
 
 ### Profiles
 - GET /profiles - all
