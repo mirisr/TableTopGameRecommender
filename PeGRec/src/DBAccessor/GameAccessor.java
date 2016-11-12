@@ -27,7 +27,27 @@ public class GameAccessor {
 	// If user exists, return userID
 	// else return -1
 	public int UserExists(String username) {
-		return -1;
+		int userId = -1;
+		PreparedStatement stmt = null;
+		try {
+			
+			String query = "select * from user where username = ?";
+			stmt = db.connection.prepareStatement(query);
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				userId = rs.getInt("id");
+			}
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		finally {
+			db.safeClose(stmt);
+		}
+		return userId;
 	}
 	
 	// Verifies user credentials

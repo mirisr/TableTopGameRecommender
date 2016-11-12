@@ -41,6 +41,9 @@ public class Handlers
         handler.addServletWithMapping(GetGameByName.class, "/games/*");
         handler.addServletWithMapping(GetAllGames.class, "/games"); // You need the /* at the end if you want a parameter
         handler.addServletWithMapping(CreateUser.class, "/user/*"); // user/username/password
+        handler.addServletWithMapping(FindUser.class, "/user_find/*"); // user_find/user
+        handler.addServletWithMapping(FindUser.class, "/top_n/*"); // top_n/user_id/des_game/n
+        
         // Start things up!
         server.start();
 
@@ -72,6 +75,26 @@ public class Handlers
         }
     }
 
+    @SuppressWarnings("serial")
+    public static class FindUser extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            String user = splitInfo[1];
+            
+            GameAccessor accessor = new GameAccessor();
+            
+            response.getWriter().println(accessor.UserExists(user));
+        }
+    }
+    
     @SuppressWarnings("serial")
     public static class GetGameByName extends HttpServlet
     {
