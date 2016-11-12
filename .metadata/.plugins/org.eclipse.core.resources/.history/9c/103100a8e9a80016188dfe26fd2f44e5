@@ -38,6 +38,7 @@ public class GameAccessor {
 					userId = rs.getInt("id");
 				}
 		      
+		      
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block

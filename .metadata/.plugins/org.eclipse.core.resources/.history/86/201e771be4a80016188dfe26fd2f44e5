@@ -41,7 +41,7 @@ public class Handlers
         handler.addServletWithMapping(GetGameByName.class, "/games/*");
         handler.addServletWithMapping(GetAllGames.class, "/games"); // You need the /* at the end if you want a parameter
         handler.addServletWithMapping(CreateUser.class, "/user_create/*"); // user/username/password
-        handler.addServletWithMapping(VerifyUser.class, "/user_verify/*"); // user/username/password
+        handler.addServletWithMapping(CreateUser.class, "/user_verify/*"); // user/username/password
         // Start things up!
         server.start();
 

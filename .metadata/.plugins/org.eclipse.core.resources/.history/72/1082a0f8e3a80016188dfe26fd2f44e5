@@ -41,7 +41,6 @@ public class Handlers
         handler.addServletWithMapping(GetGameByName.class, "/games/*");
         handler.addServletWithMapping(GetAllGames.class, "/games"); // You need the /* at the end if you want a parameter
         handler.addServletWithMapping(CreateUser.class, "/user_create/*"); // user/username/password
-        handler.addServletWithMapping(VerifyUser.class, "/user_verify/*"); // user/username/password
         // Start things up!
         server.start();
 
@@ -75,7 +74,7 @@ public class Handlers
     }
     
     @SuppressWarnings("serial")
-    public static class VerifyUser extends HttpServlet
+    public static class CreateUser extends HttpServlet
     {
         @Override
         protected void doGet( HttpServletRequest request,
@@ -90,7 +89,7 @@ public class Handlers
             String password = splitInfo[2];
             
             GameAccessor accessor = new GameAccessor();
-            int userId = accessor.VerifyUser(username, password);
+            int userId = accessor.CreateUser(username, password);
             
             response.getWriter().println("{\"userId\":"+ userId + "}");
         }

@@ -33,10 +33,12 @@ public class GameAccessor {
 		        query = "select * from users where username = ?";
 		        preparedStmt = db.connection.prepareStatement(query);
 		        preparedStmt.setString(1, username);
+		        preparedStmt.setString(2,  password);
 				ResultSet rs = preparedStmt.executeQuery();
 				if (rs.next()) {
 					userId = rs.getInt("id");
 				}
+		      
 		      
 		}
 		catch (Exception e) {

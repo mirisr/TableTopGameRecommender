@@ -20,24 +20,15 @@ public class GameAccessor {
 	// Creates User into Database - Assumes the user does not already exist in the DB
 	// If successful returns the newly created userID. else return -1
 	public int CreateUser(String username, String password) {
-		int userId = -1;
 		PreparedStatement preparedStmt = null;
 		try {
-				String query = "insert into users (username, password) values (?, ?)";
-				preparedStmt = db.connection.prepareStatement(query);
-				preparedStmt.setString (1, username);
-				preparedStmt.setString (2, password);
-				preparedStmt.execute();
-				db.safeClose(preparedStmt);
-		      
-		        query = "select * from users where username = ?";
-		        preparedStmt = db.connection.prepareStatement(query);
-		        preparedStmt.setString(1, username);
-				ResultSet rs = preparedStmt.executeQuery();
-				if (rs.next()) {
-					userId = rs.getInt("id");
-				}
-		      
+			  String query = " insert into users (username, password) values (?, ?)";
+		      preparedStmt = db.connection.prepareStatement(query);
+		      preparedStmt.setString (1, username);
+		      preparedStmt.setString (2, password);
+	
+		      // execute the preparedstatement
+		      preparedStmt.execute();
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -47,7 +38,7 @@ public class GameAccessor {
 		finally {
 			db.safeClose(preparedStmt);
 		}
-		return userId;
+		return -1;
 	}
 	
 	// Check to see if the User Exists
