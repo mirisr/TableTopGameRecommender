@@ -38,7 +38,7 @@ public class GameAccessor {
 		return candidateGames;
 	}
 	
-	private List<Game> GetAllGames() {
+	public List<Game> GetAllGames() {
 		List<Game>games = null;
 		PreparedStatement stmt = null;
 		try {

@@ -55,7 +55,7 @@ public class PeGRec {
 		return game;
 	}
 	
-	
+	/*
 	private List<Game> CreateProfile_Eric() {
 		List<Game>profile = new ArrayList<Game>();
 		ArrayList<String> gameNames = new ArrayList<String>() {{
@@ -187,5 +187,5 @@ public class PeGRec {
 	private void TestGetGameByName() {
 		System.out.println(accessor.GetGameByName("Twilight Struggle"));
 	}
-
+    */
 }
