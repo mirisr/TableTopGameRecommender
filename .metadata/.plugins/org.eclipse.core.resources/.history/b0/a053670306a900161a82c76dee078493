@@ -44,8 +44,8 @@ public class Handlers
         handler.addServletWithMapping(GetAllGames.class, "/games-all"); // 
         handler.addServletWithMapping(CreateUser.class, "/profiles-create/*"); // user/username/password
         handler.addServletWithMapping(VerifyUser.class, "/profiles-verify/*"); // user/username/password
-        handler.addServletWithMapping(FindUser.class, "/profiles-find/*"); // user_find/username
-        handler.addServletWithMapping(GetTopN.class, "/games-top-n/*"); // top_n/user_id/des_game/n
+        handler.addServletWithMapping(FindUser.class, "/user_find/*"); // user_find/username
+        handler.addServletWithMapping(GetTopN.class, "/top_n/*"); // top_n/user_id/des_game/n
 
         // Start things up!
         server.start();
