@@ -46,7 +46,9 @@ public class Handlers
         handler.addServletWithMapping(VerifyUser.class, "/profiles-verify/*"); // user/username/password
         handler.addServletWithMapping(FindUser.class, "/profiles-find/*"); // user_find/username
         handler.addServletWithMapping(GetTopN.class, "/games-top-n/*"); // top_n/user_id/des_game/n
-
+        handler.addServletWithMapping(AddGameToProfile.class, "/profiles-games-add/*"); //  /userId/gameId
+        handler.addServletWithMapping(GetProfileGames.class, "/profiles-games/*"); // userId
+        
         // Start things up!
         server.start();
 
@@ -68,6 +70,28 @@ public class Handlers
         }
         str.append("}");
         return str.toString();
+    }
+    
+    @SuppressWarnings("serial")
+    public static class AddGameToProfile extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");//  /userId/gameId
+            String userId = splitInfo[1]; 
+            String gameId = splitInfo[2];
+            
+            GameAccessor accessor = new GameAccessor();
+            accessor.AddGameToProfile(Integer.parseInt(userId), Integer.parseInt(gameId));
+            
+            response.getWriter().println("{\"Success\":"+ 1 + "}");
+        }
     }
     
     @SuppressWarnings("serial")
@@ -196,6 +220,25 @@ public class Handlers
 
             
             response.getWriter().println(GamesJson(games));
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    public static class GetProfileGames extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            int userId = Integer.parseInt(splitInfo[1]);
+            GameAccessor accessor = new GameAccessor();
+            List<Game>profileGames = accessor.GetProfileGames(userId);
+            response.getWriter().println(GamesJson(profileGames));
         }
     }
 }

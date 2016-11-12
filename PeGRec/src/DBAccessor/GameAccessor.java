@@ -18,6 +18,74 @@ public class GameAccessor {
 		db = new DB();
 	}
 	
+	public List<Game> GetProfileGames(int userId) {
+		List<Game> profileGames = null;
+		PreparedStatement stmt = null;
+		try {
+			String query = "select * from games g where g.id in (select game_id from profiles where user_id = ?);";
+			stmt = db.connection.prepareStatement(query);
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			
+			profileGames = CreateGames(rs);
+			for(Iterator<Game> i = profileGames.iterator(); i.hasNext(); ) {
+			    Game game = i.next();
+			    query = "select distinct(category) from categories where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddCategoriesToGame(rs, game);
+				
+				query = "select distinct(mechanic) from mechanics where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddMechanicsToGame(rs, game);
+				//System.out.println("Finished adding mechanics.");
+				
+			    query = "select distinct(type) from types where id = ? ";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, game.id);
+				rs = stmt.executeQuery();
+				game = AddTypesToGame(rs, game);
+				
+			}
+
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		finally {
+			db.safeClose(stmt);
+		}
+		
+		return profileGames;
+	}
+	
+	public void AddGameToProfile(int userId, int gameId) {
+		
+		PreparedStatement preparedStmt = null;
+		try {
+				String query = "insert into profiles values (?, ?)";
+				preparedStmt = db.connection.prepareStatement(query);
+				preparedStmt.setInt (1, userId);
+				preparedStmt.setInt (2, gameId);
+				preparedStmt.execute();
+				db.safeClose(preparedStmt);
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		finally {
+			db.safeClose(preparedStmt);
+			
+		}
+	}
+	
 	// Creates User into Database - Assumes the user does not already exist in the DB
 	// If successful returns the newly created userID. else return -1
 	public int CreateUser(String username, String password) {

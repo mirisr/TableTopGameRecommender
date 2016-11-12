@@ -1,0 +1,224 @@
+package Server;
+
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
+
+import DBAccessor.GameAccessor;
+import Models.CandidateGame;
+import Models.Game;
+
+public class Handlers
+{
+    public static void main( String[] args ) throws Exception
+    {
+        // Create a basic jetty server object that will listen on port 8080.
+        // Note that if you set this to port 0 then a randomly available port
+        // will be assigned that you can either look in the logs for the port,
+        // or programmatically obtain it for use in test cases.
+        Server server = new Server(8080);
+
+        // The ServletHandler is a dead simple way to create a context handler
+        // that is backed by an instance of a Servlet.
+        // This handler then needs to be registered with the Server object.
+        ServletHandler handler = new ServletHandler();
+        server.setHandler(handler);
+
+        // Passing in the class for the Servlet allows jetty to instantiate an
+        // instance of that Servlet and mount it on a given context path.
+
+        // IMPORTANT:
+        // This is a raw Servlet, not a Servlet that has been configured
+        // through a web.xml @WebServlet annotation, or anything similar.
+        //handler.addServletWithMapping(GetGameByName.class, "/games/*");
+        handler.addServletWithMapping(GetAllGames.class, "/games-all"); // 
+        handler.addServletWithMapping(CreateUser.class, "/profiles-create/*"); // user/username/password
+        handler.addServletWithMapping(VerifyUser.class, "/profiles-verify/*"); // user/username/password
+        handler.addServletWithMapping(FindUser.class, "/profiles-find/*"); // user_find/username
+        handler.addServletWithMapping(GetTopN.class, "/games-top-n/*"); // top_n/user_id/des_game/n
+        handler.addServletWithMapping(AddGameToProfile.class, "/profiles-games-add/*"); //  /userId/gameId
+        
+        // Start things up!
+        server.start();
+
+        // The use of server.join() the will make the current thread join and
+        // wait until the server is done executing.
+        // See
+        // http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#join()
+        server.join();
+    }
+    
+    public static String GamesJson(List<Game> games) {
+        StringBuilder str = new StringBuilder();
+        str.append("{\n");
+        for (int i = 0; i < games.size(); i++) {
+        	str.append(games.get(i).getJson());
+        	if(i != games.size() - 1) {
+        		str.append(",\n");
+        	}
+        }
+        str.append("}");
+        return str.toString();
+    }
+    
+    @SuppressWarnings("serial")
+    public static class AddGameToProfile extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");//  /userId/gameId
+            String userId = splitInfo[1]; 
+            String gameId = splitInfo[2];
+            
+            GameAccessor accessor = new GameAccessor();
+            int userId = accessor.CreateUser(username, password);
+            
+            response.getWriter().println("{\"userId\":"+ userId + "}");
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    public static class CreateUser extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            String username = splitInfo[1];
+            String password = splitInfo[2];
+            
+            GameAccessor accessor = new GameAccessor();
+            int userId = accessor.CreateUser(username, password);
+            
+            response.getWriter().println("{\"userId\":"+ userId + "}");
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    public static class VerifyUser extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            String username = splitInfo[1];
+            String password = splitInfo[2];
+            
+            GameAccessor accessor = new GameAccessor();
+            int userId = accessor.VerifyUser(username, password);
+            
+            response.getWriter().println("{\"userId\":"+ userId + "}");
+        }
+    }
+
+    @SuppressWarnings("serial")
+    public static class FindUser extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            String user = splitInfo[1];
+            
+            GameAccessor accessor = new GameAccessor();
+            int userId = accessor.UserExists(user);
+            response.getWriter().println("{\"userId\":"+ userId + "}");
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    public static class GetTopN extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            int userId = Integer.parseInt(splitInfo[1]);
+            int desGame = Integer.parseInt(splitInfo[2]);
+            int n = Integer.parseInt(splitInfo[3]);
+            
+            GameAccessor accessor = new GameAccessor();
+            List<CandidateGame> reccomendedGames = accessor.GetTopN(userId, desGame, n);
+            List<Game> games = new ArrayList<Game>();
+            for(CandidateGame cd : reccomendedGames) {
+            	games.add(cd.game);
+            }
+            response.getWriter().println(GamesJson(games));
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    public static class GetGameByName extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String name = request.getPathInfo(); // to get parameters
+            System.out.println(name);
+            name = name.substring(1, name.length());
+            GameAccessor accessor = new GameAccessor();
+            Game game = accessor.GetGameByName(name);
+            
+            response.getWriter().println(game.toString());
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    public static class GetAllGames extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+           
+            GameAccessor accessor = new GameAccessor();
+            List<Game> games = accessor.GetAllGames();
+
+            
+            response.getWriter().println(GamesJson(games));
+        }
+    }
+}
