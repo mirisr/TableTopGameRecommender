@@ -33,7 +33,7 @@ public class Game {
 		this.max_time = max_time;
 		this.categories = categories;
 	}
-	
+	//test
 	public Game() {
 		
 	}
