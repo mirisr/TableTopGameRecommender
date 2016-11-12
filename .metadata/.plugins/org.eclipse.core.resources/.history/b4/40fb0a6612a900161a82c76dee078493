@@ -89,7 +89,7 @@ public class Handlers
             String gameId = splitInfo[2];
             
             GameAccessor accessor = new GameAccessor();
-            accessor.RemoveGameFromProfile(Integer.parseInt(userId), Integer.parseInt(gameId));
+            accessor.AddGameToProfile(Integer.parseInt(userId), Integer.parseInt(gameId));
             
             response.getWriter().println("{\"Success\":"+ 1 + "}");
         }
