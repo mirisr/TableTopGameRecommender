@@ -3,6 +3,7 @@ package Server;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 
 import DBAccessor.GameAccessor;
+import Models.CandidateGame;
 import Models.Game;
 
 public class Handlers
@@ -44,7 +46,7 @@ public class Handlers
         handler.addServletWithMapping(CreateUser.class, "/user_create/*"); // user/username/password
         handler.addServletWithMapping(VerifyUser.class, "/user_verify/*"); // user/username/password
         handler.addServletWithMapping(FindUser.class, "/user_find/*"); // user_find/user
-        handler.addServletWithMapping(FindUser.class, "/top_n/*"); // top_n/user_id/des_game/n
+        handler.addServletWithMapping(GetTopN.class, "/top_n/*"); // top_n/user_id/des_game/n
 
         // Start things up!
         server.start();
@@ -54,6 +56,19 @@ public class Handlers
         // See
         // http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#join()
         server.join();
+    }
+    
+    public static String GamesJson(List<Game> games) {
+        StringBuilder str = new StringBuilder();
+        str.append("{\n");
+        for (int i = 0; i < games.size(); i++) {
+        	str.append(games.get(i).getJson());
+        	if(i != games.size() - 1) {
+        		str.append(",\n");
+        	}
+        }
+        str.append("}");
+        return str.toString();
     }
     
     @SuppressWarnings("serial")
@@ -121,6 +136,32 @@ public class Handlers
     }
     
     @SuppressWarnings("serial")
+    public static class GetTopN extends HttpServlet
+    {
+        @Override
+        protected void doGet( HttpServletRequest request,
+                              HttpServletResponse response ) throws ServletException,
+                                                            IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            String info = request.getPathInfo(); // to get parameters
+            String[] splitInfo = info.split("/");
+            int userId = Integer.parseInt(splitInfo[1]);
+            int desGame = Integer.parseInt(splitInfo[2]);
+            int n = Integer.parseInt(splitInfo[3]);
+            
+            GameAccessor accessor = new GameAccessor();
+            List<CandidateGame> reccomendedGames = accessor.GetTopN(userId, desGame, n);
+            List<Game> games = new ArrayList<Game>();
+            for(CandidateGame cd : reccomendedGames) {
+            	games.add(cd.game);
+            }
+            response.getWriter().println(GamesJson(games));
+        }
+    }
+    
+    @SuppressWarnings("serial")
     public static class GetGameByName extends HttpServlet
     {
         @Override
@@ -153,17 +194,9 @@ public class Handlers
            
             GameAccessor accessor = new GameAccessor();
             List<Game> games = accessor.GetAllGames();
-            StringBuilder str = new StringBuilder();
-            str.append("{\n");
-            for (int i = 0; i < games.size(); i++) {
-            	str.append(games.get(i).getJson());
-            	if(i != games.size() - 1) {
-            		str.append(",\n");
-            	}
-            }
-            str.append("}");
+
             
-            response.getWriter().println(str.toString());
+            response.getWriter().println(GamesJson(games));
         }
     }
 }
