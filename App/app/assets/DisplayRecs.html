@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>TableTop</title>
+
+    <!-- Bootstrap Core CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Google Fonts URL -->
+   <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+
+    
+    <!-- Custom CSS -->
+    <link href="TableTop.css" rel="stylesheet">
+
+    <style type="text/css">
+
+    body
+    {
+        background-image:url("https://hd.unsplash.com/photo-1467663802424-21ff675548c4");
+        background-size: 100% 1000px;
+        background-repeat:no-repeat;
+        font-family: 'Titillium Web', sans-serif;
+        overflow: scroll;
+        font-size: 20px;
+    }
+
+    h2{
+        color: white;
+        font-weight: bold;
+        font-size: 75px;
+    }
+
+    #header{
+        display: block;
+        text-align: center;
+    }
+
+    #instructions{
+        margin-top: 25px;
+        color: white;
+
+    }
+
+    .form-control{
+        float:right;
+        clear: both;
+    }
+
+    .right {
+        margin-top: 20px;
+        display: block;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        float:right;
+    }
+
+
+
+    .container{
+        margin-top: 230px;
+        margin-right: 150px;
+        width: 50%;
+        float:right;
+    }
+
+    .list{
+        float:right;
+        width: 100%;
+    }
+
+    input[type=text], select {
+        width: 33%;
+        padding: 27px 20px;
+        margin-top: 25px;
+        margin-bottom: 25px;
+        /*border: 1px solid #ccc;*/
+        border-radius: 4px;
+        font-size: 18px;
+    }
+
+    input[type=button] {
+        width: 100%;
+        background-color: #212121;
+        color: white;
+        padding: 15px 20px;
+        margin: 25px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 18px;
+        float: right;
+        clear: right;
+
+    }
+
+    input[type=button]:hover {
+        background-color: #212121;
+    }
+
+    input[type=search], select {
+        width: 100%;
+        padding: 27px 20px;
+        margin-top: 25px;
+        margin-bottom: 25px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 18px;
+  /*      background-image:url('&#10010');
+        background-repeat:no-repeat;
+        background-position:right center;outline:0;*/
+
+    }
+
+    .game {
+
+        list-style-type: none;
+        margin-left:0px;
+        padding-left:0px;
+        display: inline-block;
+    }
+    .game img {
+        float:left;
+    }
+    .game p,h3 {
+        text-align: right; 
+        display:inline-block;
+        padding: 0;
+    }
+
+     select, ul { height: 100%; overflow: auto; width: 100px; /*border: 1px solid #000;*/ }
+    ul { list-style-type: none; margin: 0; padding: 0; overflow-x: hidden; width:100%}
+    li { margin: 0px; padding: 0; width:100%; }
+    label { display: block; color: WindowText; background-color: Window; margin: 0; padding: 0; 
+        width: 100%; height: 150px; }
+    label:hover { background-color: Highlight; color: HighlightText; }
+  
+
+    </style>
+
+</head>
+
+     <!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angula rjs/1.4.8/angular.min.js"></script>
+
+    <!-- jQuery -->
+
+    <script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<body ng-app="myApp">
+
+    <div class="container">
+        <div class ="right">
+            <ul id = "list">
+                <li class="game">
+                    <a href=""><img src="https://www.google.co.in/images/srpr/logo4w.png" alt="icon" width="200" height="auto" /></a>
+                    <h3>Header</h3>
+                    <p>
+                    text goes here
+                    </P></p>
+                <li>
+             </ul>
+        </div>   
+           
+    </div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
