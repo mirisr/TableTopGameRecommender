@@ -173,7 +173,14 @@ public class FeatureScores {
 			    Tuple tuple= t.next();
 			    int row = mechNames.indexOf(tuple.getLeft());
 			    int col = mechNames.indexOf(tuple.getRight());
-			    COFSums += mcofs[row][col];
+
+				// check if in bounds, otherwise default mcof to 0
+				if (row < 0 || row >= mcofs.length || col < 0 || col >= mcofs[0].length) {
+					COFSums += 0.0;
+				}
+				else {
+					COFSums += mcofs[row][col];
+				}
 		    }
 		    
 		    float valueFromProfileGame = COFSums / (categoriesInCandidateGame * categoriesInProfileGame);
@@ -212,7 +219,14 @@ public class FeatureScores {
 			    Tuple tuple= t.next();
 			    int row = typeNames.indexOf(tuple.getLeft());
 			    int col = typeNames.indexOf(tuple.getRight());
-			    COFSums += tcofs[row][col];
+
+				// check if in bounds, otherwise default tcof to 0
+				if (row < 0 || row >= mcofs.length || col < 0 || col >= tcofs[0].length) {
+					COFSums += 0.0;
+				}
+				else {
+					COFSums += tcofs[row][col];
+				}
 		    }
 		    
 		    float valueFromProfileGame = COFSums / (categoriesInCandidateGame * categoriesInProfileGame);

@@ -74,7 +74,7 @@ public class Game {
 		}
 		categ += "]";
 		
-		return "\"game\": {\n" +
+		return "{\n" +
 					"\t\"id\": \"" + id + "\",\n" +
 					"\t\"title\": \"" + title + "\",\n" +
 					"\t\"year\": \"" + year + "\",\n" +
@@ -86,6 +86,7 @@ public class Game {
 					"\t\"min_time\": \"" + min_time + "\",\n" +
 					"\t\"max_time\": \"" + max_time + "\",\n" +
 					"\t\"categories\": " + categ + "\n" +
+					"\t\"description\":" + description + "\',\n" +
 				"}";
 	}
 	

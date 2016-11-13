@@ -8,8 +8,11 @@ angular.module('recommender', [
   'recommender.profile',
   'recommender.game',
   'recommender.version'
-]).
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+])
+
+.constant('HOST', 'http://localhost:8080')
+
+.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
   $routeProvider.otherwise({redirectTo: '/profile'});

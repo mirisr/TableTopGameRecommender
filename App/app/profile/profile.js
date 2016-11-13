@@ -9,7 +9,7 @@ angular.module('recommender.profile', ['ngRoute'])
   });
 }])
 
-.controller('profile', function($scope, Profile) {
+.controller('profile', function($scope, Profile, User) {
 
     $scope.user = {
       firstName: "",
@@ -24,15 +24,24 @@ angular.module('recommender.profile', ['ngRoute'])
 
 
       createProfile: function() {
-          alert("creating profile");
-          var newProfile = new Profile();
-          newProfile.name = this.fullName();
-          newProfile.username = $scope.user.username;
-          newProfile.password = $scope.user.password;
-          newProfile.email = $scope.user.email;
-          //newProfile.baseGame = $scope.user.baseGame;
-          //newProfile.$save();
-          console.log(newProfile);
+          Profile.createUser($scope.user.username, $scope.user.password)
+              .then(function success(response) {
+                  User.id = response.data.userId;
+                  // move on to the designated game page
+              },
+              function error(response){
+                  console.log(response);
+                  // tell user there was an error
+              });
+      },
+
+      test: function() {
+        Profile.getTopNGames(8, 1, 20)
+            .then(function(response) {
+              console.log(response);
+            }, function(response) {
+                console.log(response);
+            });
       }
     };
 });
