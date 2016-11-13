@@ -2,12 +2,14 @@
 
 // Declare app level module which depends on views, and components
 angular.module('recommender', [
+  'ng',
   'ngRoute',
   'ngResource',
   'recommender.server',
   'recommender.profile',
   'recommender.game',
-  'recommender.version'
+  'recommender.version',
+  'recommender.recommended'
 ])
 
 .constant('HOST', 'http://localhost:8080')

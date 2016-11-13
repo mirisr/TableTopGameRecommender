@@ -1,5 +1,6 @@
 package Models;
 
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 
@@ -73,6 +74,14 @@ public class Game {
 			}
 		}
 		categ += "]";
+
+		String encodedURL;
+		try {
+			encodedURL = URLEncoder.encode(image_link, "UTF-8");
+		}
+		catch (Exception e) {
+			encodedURL = "";
+		}
 		
 		return "{\n" +
 					"\t\"id\": \"" + id + "\",\n" +
@@ -85,8 +94,10 @@ public class Game {
 					"\t\"max_players\": \"" + max_players + "\",\n" +
 					"\t\"min_time\": \"" + min_time + "\",\n" +
 					"\t\"max_time\": \"" + max_time + "\",\n" +
+					//"\t\"description\":" + description + "\',\n" +
+					"\t\"image_link\": \"" + encodedURL + "\",\n" +
 					"\t\"categories\": " + categ + "\n" +
-					"\t\"description\":" + description + "\',\n" +
+
 				"}";
 	}
 	
