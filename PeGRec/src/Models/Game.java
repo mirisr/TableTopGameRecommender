@@ -48,18 +48,36 @@ public class Game {
 		
 	}
 	
-	public String toString() {
-		String categories = "";
-		for(Iterator<String> i = this.categories.iterator(); i.hasNext(); ) {
-		    String item = i.next();
-		    categories += item + " ";
+	public String GetShortDescription(int length) {
+		if (this.description.length() > length) {
+			return this.description.substring(0, length) + "...";
 		}
+		return this.description;
+	}
 	
+	public String GetStringFromList(List<String> list) {
+		String str = "";
+		for(Iterator<String> i = list.iterator(); i.hasNext(); ) {
+		    String item = i.next();
+		    str += item + ", ";
+		}
+		if (str.length() > 1)
+			return str.substring(0, str.length()-2);
+		return str;
+	}
+	
+	public String toString() {
+		
+		String categoriesStr = GetStringFromList(this.categories);
+		String mechsStr = GetStringFromList(this.mechanics);
+		String typeStr = GetStringFromList(this.types);
+		
 		return "\n"+title + " " + year + "\nAvg.Rating: " + this.avg_rating
 				+ "\nNo. ratings: " + no_ratings + "\nComplexity: " + complexity
 				+ "\nPlayers: " + this.min_players + "-" + this.max_players
 				+ "\nPlay Time: " + this.min_time + "-" + this.max_time
-				+ "\nCategories: " + categories;
+				+ "\nCategories: " + categoriesStr + "\nMechanics: " + mechsStr;
+				//+ "\nTypes: " + typeStr;
 	}
 	
 	public String getJson() {

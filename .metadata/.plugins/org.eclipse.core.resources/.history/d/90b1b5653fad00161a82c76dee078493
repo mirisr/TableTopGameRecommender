@@ -1,0 +1,46 @@
+package Models;
+
+public class CandidateGame {
+	
+	public Game game;
+	public float popularityScore=0;
+	public float complexityScore=0;
+	public float playersScore=0;
+	public float playTimeScore=0;
+	public float categoryScore=0;
+	public float mechanicScore=0;
+	public float typeScore=0;
+	public float overallScore=0;
+	
+	public CandidateGame() {
+		
+	}
+	
+	public void CalculateBasicOverallScore() {
+		
+		overallScore = popularityScore + complexityScore + playersScore + playTimeScore + categoryScore + mechanicScore + typeScore;
+	}
+	
+	public String GetHtml(int rank) {
+		String html = ""
+		  		+ "<table width = '800px height='100%' align'left' cellpadding='5'>"
+		  		+ "<tr>"
+		  		+ "<td width='20px'>"
+		  		+ "("+ rank +")</br>"
+		  		+ "</td>"
+		  		+ "<td width='120px'>"
+		  		+ "<img src=' "+ game.image_link + "' height:90';>"
+		  		+ "</td>"
+		  		+ "<td>"
+		  		+ " <a href= 'https://boardgamegeek.com/boardgame/" +game.id+ "/'>"+game.title+"</a> </br>"
+		  		+ game. description + "</br></br>"
+		  		+ "</br>"
+		  		+ " </td> </tr></table>";
+		  return html;
+	}
+	
+	public String toString() {
+		return overallScore + game.toString();
+	}
+
+}

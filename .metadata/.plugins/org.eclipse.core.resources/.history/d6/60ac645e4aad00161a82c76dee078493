@@ -1,0 +1,70 @@
+package Models;
+
+public class CandidateGame {
+	
+	public Game game;
+	public float popularityScore=0;
+	public float complexityScore=0;
+	public float playersScore=0;
+	public float playTimeScore=0;
+	public float categoryScore=0;
+	public float mechanicScore=0;
+	public float typeScore=0;
+	public float overallScore=0;
+	
+	public CandidateGame() {
+		
+	}
+	
+	public void CalculateBasicOverallScore() {
+		
+		overallScore = popularityScore + complexityScore + playersScore + playTimeScore + categoryScore + mechanicScore + typeScore;
+	}
+	
+	private String getStrRange(int min, int max) {
+		StringBuilder str = new StringBuilder();
+		if (min == max) {
+			str.append(Integer.toString(min));
+		}
+		else {
+			str.append(Integer.toString(min));
+			str.append("-");
+			str.append(Integer.toString(max));
+		}
+		return str.toString();
+	}
+	public String GetHtml(int rank) {
+		
+		String html = ""
+		  		+ "<table width = '800px height='100%' align'left' cellpadding='5'>"
+				+ "<col align=\"left\"><col align=\"right\"><col align=\"left\">"
+		  		
+		  		// First column
+		  		+ "<tr height= '230px'>"
+		  		+ "<td width='20px'>"
+		  		+  rank + "</br>"
+		  		
+		  		// Sec column
+		  		+ "</td>"
+		  		+ "<td width='200px'>"
+		  		+ "<img src=' "+ game.image_link + "' height:90';>"
+		  		//+ "<a href=\"\"><img ng-src={{"+game.image_link+"}} alt=\"icon\" width=\"80\" height=\"auto\" class='.img-thumbnail' /></a>"
+		  		+ "</td>"
+		  		
+		  		// Third column
+		  		+ "<td width ='350px'>"
+		  		+ " <h2><a href= 'https://boardgamegeek.com/boardgame/" +game.id+ "/'>"+game.title+"</a></h2> "
+		  		+ game.GetShortDescription(120) //+ "</br></br>Avg Rating: " + game.avg_rating + "</br>No. Ratings: " + game.no_ratings 
+		  		+ "</br><br>Complexity: " + game.complexity + "</br>Players: " + getStrRange(game.min_players, game.max_players) 
+		  		+ "</br> Approx Time: " + getStrRange(game.min_time, game.max_time)
+		  		+ "</br> Categories: " + game.GetStringFromList(game.categories)
+		  		+ "</br> Mechanics: " + game.GetStringFromList(game.mechanics)
+		  		+ " </br></td> </tr></table>";
+		  return html;
+	}
+	
+	public String toString() {
+		return overallScore + game.toString();
+	}
+
+}

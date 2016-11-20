@@ -29,8 +29,7 @@
 
     body
     {
-        background-color: black;
-        /*background-image:url("https://hd.unsplash.com/photo-1451732401917-66d80311800f");*/
+        background-image:url("https://hd.unsplash.com/photo-1467663802424-21ff675548c4");
         background-size: 100% 1000px;
         background-repeat:no-repeat;
         font-family: 'Titillium Web', sans-serif;
@@ -60,14 +59,27 @@
         clear: both;
     }
 
-    .center {
+    .right {
         margin-top: 20px;
         display: block;
         text-align: center;
+        width: 100%;
+        height: 100%;
+        float:right;
     }
+
+
 
     .container{
         margin-top: 230px;
+        margin-right: 150px;
+        width: 50%;
+        float:right;
+    }
+
+    .list{
+        float:right;
+        width: 100%;
     }
 
     input[type=text], select {
@@ -75,13 +87,13 @@
         padding: 27px 20px;
         margin-top: 25px;
         margin-bottom: 25px;
-        border: 1px solid #ccc;
+        /*border: 1px solid #ccc;*/
         border-radius: 4px;
         font-size: 18px;
     }
 
     input[type=button] {
-        width: 33%;
+        width: 100%;
         background-color: #212121;
         color: white;
         padding: 15px 20px;
@@ -100,7 +112,7 @@
     }
 
     input[type=search], select {
-        width: 33%;
+        width: 100%;
         padding: 27px 20px;
         margin-top: 25px;
         margin-bottom: 25px;
@@ -113,10 +125,27 @@
 
     }
 
-     select, ul { height: 100px; overflow: auto; width: 100px; border: 1px solid #000; }
-    ul { list-style-type: none; margin: 0; padding: 0; overflow-x: hidden; }
-    li { margin: 0; padding: 0; }
-    label { display: block; color: WindowText; background-color: Window; margin: 0; padding: 0; width: 100%; }
+    .game {
+
+        list-style-type: none;
+        margin-left:0px;
+        padding-left:0px;
+        display: inline-block;
+    }
+    .game img {
+        float:left;
+    }
+    .game p,h3 {
+        text-align: right; 
+        display:inline-block;
+        padding: 0;
+    }
+
+     select, ul { height: 100%; overflow: auto; width: 100px; /*border: 1px solid #000;*/ }
+    ul { list-style-type: none; margin: 0; padding: 0; overflow-x: hidden; width:100%}
+    li { margin: 0px; padding: 0; width:100%; }
+    label { display: block; color: WindowText; background-color: Window; margin: 0; padding: 0; 
+        width: 100%; height: 150px; }
     label:hover { background-color: Highlight; color: HighlightText; }
   
 
@@ -138,20 +167,23 @@
 <body ng-app="myApp">
 
     <div class="container">
-        <div class ="center">
-            <form id = "formContent">
-                <input type="search" id="search" class="form-control" placeholder = "Search to add games to your profile">
-                <ul>
-                    <li><label for="chk1"><input type="checkbox" name="chk1" id="chk1">First</label></li>
-                    <li><label for="chk2"><input type="checkbox" name="chk2" id="chk2">Second</label></li>
-                    <li><label for="chk3"><input type="checkbox" name="chk3" id="chk3">Third</label></li>
-                    <li><label for="chk4"><input type="checkbox" name="chk4" id="chk4">Fourth</label></li>
-                    <li><label for="chk5"><input type="checkbox" name="chk5" id="chk5">Fifth</label></li>
-                    <li><label for="chk6"><input type="checkbox" name="chk6" id="chk6">Sixth</label></li>
-                    <li><label for="chk7"><input type="checkbox" name="chk7" id="chk7">Seventh</label></li>
-                 </ul>
-                <input type="button" ng-click="" value="Continue"/>
-            </form>
+        <div class ="right">
+            <ul id = "list">
+                <li class="game">
+                    <a href=""><img src="https://www.google.co.in/images/srpr/logo4w.png" alt="icon" width="200" height="auto" /></a>
+                    <h3>Header</h3>
+                    <p>
+                    text goes here
+                    </P></p>
+                <li>
+                <li class="game">
+                    <a href=""><img src="https://www.google.co.in/images/srpr/logo4w.png" alt="icon" width="200" height="auto" /></a>
+                    <h3>Header</h3>
+                    <p>
+                    text goes here
+                    </P></p>
+                <li>
+             </ul>
         </div>   
            
     </div>

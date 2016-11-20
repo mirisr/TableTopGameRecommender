@@ -1,0 +1,68 @@
+package Models;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import DBAccessor.GameAccessor;
+
+public class Profile {
+	public List<Game>profile;
+	public Game designatedGame;
+	public GameAccessor accessor;
+	
+	public List<ArrayList<String>> gameNamesPerProfile = new ArrayList<ArrayList<String>>();
+	public List<String> designatedgameNamesPerProfile = new ArrayList<String>();
+	
+	public Profile(GameAccessor accessor, int profile) {
+		this.accessor = accessor;
+		addGames();
+		ArrayList<String>gameNames = gameNamesPerProfile.get(profile);
+		String name = designatedgameNamesPerProfile.get(profile);
+		this.designatedGame = GetDesignatedGame(name);
+		this.profile = GetProfile(gameNames);
+		
+	}
+	
+	private List<Game> GetProfile(ArrayList<String>gameNames) {
+		List<Game>profile = new ArrayList<Game>();
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	private Game GetDesignatedGame(String name) {
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+	
+	private void addGames() {
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+			add("Secret Hitler");
+		    add("The Resistance: Avalon");
+		    add("Ultimate Werewolf: Ultimate Edition");
+		}});
+		
+		designatedgameNamesPerProfile.add("Secret Hitler");
+		
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+			add("Secret Hitler");
+		    add("The Resistance: Avalon");
+		    add("Ultimate Werewolf: Ultimate Edition");
+		}});
+		
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+			add("Secret Hitler");
+		    add("The Resistance: Avalon");
+		    add("Ultimate Werewolf: Ultimate Edition");
+		}});
+	}
+
+}

@@ -1,0 +1,54 @@
+package Models;
+
+public class CandidateGame {
+	
+	public Game game;
+	public float popularityScore=0;
+	public float complexityScore=0;
+	public float playersScore=0;
+	public float playTimeScore=0;
+	public float categoryScore=0;
+	public float mechanicScore=0;
+	public float typeScore=0;
+	public float overallScore=0;
+	
+	public CandidateGame() {
+		
+	}
+	
+	public void CalculateBasicOverallScore() {
+		
+		overallScore = popularityScore + complexityScore + playersScore + playTimeScore + categoryScore + mechanicScore + typeScore;
+	}
+	
+	private getStrRange(int min, int max) {
+		StringBuilder str = new StringBuilder();
+		if (min == max) {
+			str.append(Integer.toString(min))
+		}
+	}
+	public String GetHtml(int rank) {
+		
+		String html = ""
+		  		+ "<table width = '800px height='100%' align'left' cellpadding='5'>"
+		  		+ "<tr>"
+		  		+ "<td width='20px'>"
+		  		+ "("+ rank +")</br>"
+		  		+ "</td>"
+		  		+ "<td width='120px'>"
+		  		+ "<img src=' "+ game.image_link + "' height:90';>"
+		  		+ "</td>"
+		  		+ "<td>"
+		  		+ " <a href= 'https://boardgamegeek.com/boardgame/" +game.id+ "/'>"+game.title+"</a> </br>"
+		  		+ game. description + "</br></br>Avg Rating: " + game.avg_rating + "</br>No. Ratings: " + game.no_ratings 
+		  		+ "</br>Complexity: " + game.complexity + "</br>Players: " +  + "</br> PVScore: " + rankPVScore.get(vid)
+		  		+ "</br>"
+		  		+ " </td> </tr></table>";
+		  return html;
+	}
+	
+	public String toString() {
+		return overallScore + game.toString();
+	}
+
+}

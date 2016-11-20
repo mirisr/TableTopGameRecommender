@@ -1,0 +1,46 @@
+package Models;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import DBAccessor.GameAccessor;
+
+public class Profile {
+	public List<Game>profile;
+	public Game designatedGame;
+	public GameAccessor accessor;
+	public List<ArrayList<String>> gameNamesPerProfile = new ArrayList<ArrayList<String>>();
+	public List<ArrayList<String>> designatedgameNamesPerProfile = new ArrayList<ArrayList<String>>();
+	
+	public Profile(GameAccessor accessor) {
+		this.accessor = accessor;
+		
+	}
+	
+	private List<Game> CreateProfile() {
+		List<Game>profile = new ArrayList<Game>();
+		ArrayList<String> gameNames = new ArrayList<String>() {{
+			add("Secret Hitler");
+		    add("The Resistance: Avalon");
+		    add("Ultimate Werewolf: Ultimate Edition");
+		}};
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	private Game CreateDesignatedGame() {
+		String name = "Secret Hitler";
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+
+}

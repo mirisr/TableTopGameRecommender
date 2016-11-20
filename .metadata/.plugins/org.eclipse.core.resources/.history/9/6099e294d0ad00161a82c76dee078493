@@ -1,0 +1,13 @@
+package Models;
+
+import java.util.List;
+
+public class Profile {
+	List<Game>profile;
+	Game designatedGame;
+	
+	public Profile() {
+		
+	}
+
+}

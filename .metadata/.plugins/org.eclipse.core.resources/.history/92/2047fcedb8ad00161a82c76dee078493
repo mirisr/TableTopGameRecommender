@@ -1,0 +1,211 @@
+package Interface;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import Computation.GameRanker;
+import DBAccessor.GameAccessor;
+import Models.CandidateGame;
+import Models.Game;
+
+public class TTGameRec {
+
+	private static GameAccessor accessor = new GameAccessor();
+	
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+		TTGameRec rec = new TTGameRec();
+		List<Game>profile = rec.CreateProfile_Iris();
+		Game designatedGame = rec.CreateDesignatedGame_Iris();
+		
+		System.out.println("\n\nGenerating Recommendations...\n\n");
+		
+		GameRanker ranker = new GameRanker(accessor, profile, designatedGame);
+		List<CandidateGame> topGames = ranker.GetTopNGames(5);
+		System.out.println("-------------------------------");
+		
+		// For the html page title area
+		PrintWriter writer = new PrintWriter("GameRanks.html","UTF8");
+		writer.println("<style> h1 {color: navy;} a {text-decoration: none; color:teal;}"
+		+" body {font-family:'Titillium Web', sans-serif;} "
+		+"img.displayed { display: block;margin-left: auto; margin-right: auto }"
+		+ "</style>");
+		writer.println("<body background=\"file:///Users/IrisSeaman/Documents/TableTopGames/PeGRec/lib/pattern.jpg\"");
+	    writer.println("</br><h1>TTGameRec <br/><small>Personalize TTGame Recommender</small> </h1> <p></br>");
+		int rank = 1;   
+		for(Iterator<CandidateGame> i = topGames.iterator(); i.hasNext(); ) {
+			CandidateGame game = i.next();
+			System.out.println(game.toString());
+			System.out.println("-------------------------------");
+			
+			writer.println(game.GetHtml(rank));
+			
+			rank++;
+		}
+		writer.close();
+		//Game g = new Game();
+		//System.out.println(g.getJson());
+	}
+	
+    private List<Game> CreateProfile_Eric_2() {
+		List<Game>profile = new ArrayList<Game>();
+		ArrayList<String> gameNames = new ArrayList<String>() {{
+			add("Secret Hitler");
+		    add("The Resistance: Avalon");
+		    add("Ultimate Werewolf: Ultimate Edition");
+		}};
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	private Game CreateDesignatedGame_Eric_2() {
+		String name = "Secret Hitler";
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+	
+	
+	private List<Game> CreateProfile_Eric() {
+		List<Game>profile = new ArrayList<Game>();
+		ArrayList<String> gameNames = new ArrayList<String>() {{
+		    add("Betrayal at House on the Hill");
+		    add("Specter Ops");
+		    add("Smash Up");
+		}};
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	private Game CreateDesignatedGame_Eric() {
+		String name = "Five Tribes";
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+	
+	private List<Game> CreateProfile_Brock() {
+		List<Game>profile = new ArrayList<Game>();
+		ArrayList<String> gameNames = new ArrayList<String>() {{
+		    add("Ticket to Ride");
+		    add("Carcassonne");
+		    add("Guillotine");
+		}};
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	private Game CreateDesignatedGame_Brock() {
+		String name = "Catan";
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+	
+	private List<Game> CreateProfile_Kevin() {
+		List<Game>profile = new ArrayList<Game>();
+		ArrayList<String> gameNames = new ArrayList<String>() {{
+		    add("Betrayal at House on the Hill");
+		    add("Dead of Winter: A Crossroads Game");
+		    add("Smash Up");
+		}};
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	private Game CreateDesignatedGame_Kevin() {
+		String name = "Betrayal at House on the Hill";
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+	
+	private List<Game> CreateProfile_Iris() {
+		List<Game>profile = new ArrayList<Game>();
+		ArrayList<String> gameNames = new ArrayList<String>() {{
+		    add("Spot it!");
+		    add("Guillotine");
+		    add("Cranium");
+		}};
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	
+	private Game CreateDesignatedGame_Iris() {
+		String name = "Catch Phrase!";
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+	
+	private Game CreateDesignatedGame1() {
+		String name = "Pandemic Legacy: Season 1";
+		Game game = accessor.GetGameByName(name);
+		//System.out.println(game.toString());
+		return game;
+	}
+	
+	private List<Game> CreateProfile1() {
+		List<Game>profile = new ArrayList<Game>();
+		ArrayList<String> gameNames = new ArrayList<String>() {{
+		    add("Puerto Rico");
+		    add("Agricola");
+		    add("Power Grid");
+		    add("7 Wonders");
+		    add("Eldritch Horror");
+		}};
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    //System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+		
+	private void TestGetGameByName() {
+		System.out.println(accessor.GetGameByName("Twilight Struggle"));
+	}
+    
+}

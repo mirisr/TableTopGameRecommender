@@ -1,0 +1,106 @@
+package Models;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import DBAccessor.GameAccessor;
+
+public class Profile {
+	public List<Game>profile;
+	public Game designatedGame;
+	public GameAccessor accessor;
+	
+	public List<ArrayList<String>> gameNamesPerProfile = new ArrayList<ArrayList<String>>();
+	public List<String> designatedgameNamesPerProfile = new ArrayList<String>();
+	
+	public Profile(GameAccessor accessor, int profile) {
+		this.accessor = accessor;
+		addGames();
+		ArrayList<String>gameNames = gameNamesPerProfile.get(profile);
+		String name = designatedgameNamesPerProfile.get(profile);
+		this.designatedGame = GetDesignatedGame(name);
+		this.profile = GetProfile(gameNames);
+		
+	}
+	
+	private List<Game> GetProfile(ArrayList<String>gameNames) {
+		List<Game>profile = new ArrayList<Game>();
+		
+		for(Iterator<String> i = gameNames.iterator(); i.hasNext(); ) {
+		    String name = i.next();
+		    Game game = accessor.GetGameByName(name);
+		    profile.add(game);
+		    System.out.println(game.toString());
+		}
+		
+		return profile;
+	}
+	
+	private Game GetDesignatedGame(String name) {
+		Game game = accessor.GetGameByName(name);
+		System.out.println(game.toString());
+		return game;
+	}
+	
+	private void addGames() {
+		// 0
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+			add("Secret Hitler");
+		    add("The Resistance: Avalon");
+		    add("Ultimate Werewolf: Ultimate Edition");
+		}});
+		designatedgameNamesPerProfile.add("Secret Hitler");
+		
+		// 1
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+		    add("Betrayal at House on the Hill");
+		    add("Specter Ops");
+		    add("Smash Up");
+		}});
+		designatedgameNamesPerProfile.add("Five Tribes");
+		
+		// 2
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+		    add("Betrayal at House on the Hill");
+		    add("Dead of Winter: A Crossroads Game");
+		    add("Smash Up");
+		}});
+		designatedgameNamesPerProfile.add("Betrayal at House on the Hill");
+		
+		// 3
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+		    add("Ticket to Ride");
+		    add("Carcassonne");
+		    add("Guillotine");
+		}});
+		designatedgameNamesPerProfile.add("Catan");
+		
+		// 4
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+		    add("Spot it!");
+		    add("Guillotine");
+		    add("Cranium");
+		}});
+		designatedgameNamesPerProfile.add("Catch Phrase!");
+		
+		// 5
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+		    add("Phase 10");
+		    add("Rook");
+		    add("Old Maid");
+		    add("Rummikub");
+		}});
+		designatedgameNamesPerProfile.add("UNO");
+		
+		// 6
+		gameNamesPerProfile.add(new ArrayList<String>() {{
+		    add("Mistfall");
+		    add("Pathfinder Adventure Card Game: Rise of the Runelords – Base Set");
+		    add("The Undercity: An Iron Kingdoms Adventure Board Game");
+		    add("Rummikub");
+		}});
+		designatedgameNamesPerProfile.add("Zombicide");
+	}
+
+}

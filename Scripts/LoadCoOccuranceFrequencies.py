@@ -70,7 +70,7 @@ def ImportCoOccuranceFrequencies():
 			db.commit()
 
 CleanCOFToReImport()
-filename = "Game_Info_More_Unique.csv"
+filename = "RawData/Game_Info_More_Unique.csv"
 line = 1
 with open(filename, 'rb') as csvfile:
 	reader = csv.reader(csvfile)
