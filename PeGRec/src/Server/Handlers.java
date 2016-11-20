@@ -5,6 +5,7 @@ package Server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,7 +42,7 @@ public class Handlers
         // This is a raw Servlet, not a Servlet that has been configured
         // through a web.xml @WebServlet annotation, or anything similar.
         //handler.addServletWithMapping(GetGameByName.class, "/games/*");
-        handler.addServletWithMapping(GetAllGames.class, "/games-all"); // 
+        handler.addServletWithMapping(GetAllGames.class, "/games-all"); //
         handler.addServletWithMapping(CreateUser.class, "/profiles-create/*"); // user/username/password
         handler.addServletWithMapping(VerifyUser.class, "/profiles-verify/*"); // user/username/password
         handler.addServletWithMapping(FindUser.class, "/profiles-find/*"); // user_find/username
@@ -49,7 +50,7 @@ public class Handlers
         handler.addServletWithMapping(AddGameToProfile.class, "/profiles-games-add/*"); //  /userId/gameId
         handler.addServletWithMapping(GetProfileGames.class, "/profiles-games-all/*"); // userId
         handler.addServletWithMapping(RemoveGameToProfile.class, "/profiles-games-remove/*"); //  /userId/gameId
-        
+
         // Start things up!
         server.start();
 
@@ -59,20 +60,20 @@ public class Handlers
         // http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#join()
         server.join();
     }
-    
+
     public static String GamesJson(List<Game> games) {
         StringBuilder str = new StringBuilder();
-        str.append("{\n");
+        str.append("{\"games\": [\n");
         for (int i = 0; i < games.size(); i++) {
         	str.append(games.get(i).getJson());
         	if(i != games.size() - 1) {
         		str.append(",\n");
         	}
         }
-        str.append("}");
+        str.append("]}");
         return str.toString();
     }
-    
+
     @SuppressWarnings("serial")
     public static class RemoveGameToProfile extends HttpServlet
     {
@@ -82,19 +83,20 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String info = request.getPathInfo(); // to get parameters
             String[] splitInfo = info.split("/");//  /userId/gameId
-            String userId = splitInfo[1]; 
+            String userId = splitInfo[1];
             String gameId = splitInfo[2];
-            
+
             GameAccessor accessor = new GameAccessor();
             accessor.RemoveGameFromProfile(Integer.parseInt(userId), Integer.parseInt(gameId));
-            
+
             response.getWriter().println("{\"Success\":"+ 1 + "}");
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class AddGameToProfile extends HttpServlet
     {
@@ -104,19 +106,20 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String info = request.getPathInfo(); // to get parameters
             String[] splitInfo = info.split("/");//  /userId/gameId
-            String userId = splitInfo[1]; 
+            String userId = splitInfo[1];
             String gameId = splitInfo[2];
-            
+
             GameAccessor accessor = new GameAccessor();
             accessor.AddGameToProfile(Integer.parseInt(userId), Integer.parseInt(gameId));
-            
+
             response.getWriter().println("{\"Success\":"+ 1 + "}");
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class CreateUser extends HttpServlet
     {
@@ -126,19 +129,20 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String info = request.getPathInfo(); // to get parameters
             String[] splitInfo = info.split("/");
             String username = splitInfo[1];
             String password = splitInfo[2];
-            
+
             GameAccessor accessor = new GameAccessor();
             int userId = accessor.CreateUser(username, password);
-            
+
             response.getWriter().println("{\"userId\":"+ userId + "}");
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class VerifyUser extends HttpServlet
     {
@@ -148,15 +152,16 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String info = request.getPathInfo(); // to get parameters
             String[] splitInfo = info.split("/");
             String username = splitInfo[1];
             String password = splitInfo[2];
-            
+
             GameAccessor accessor = new GameAccessor();
             int userId = accessor.VerifyUser(username, password);
-            
+
             response.getWriter().println("{\"userId\":"+ userId + "}");
         }
     }
@@ -170,17 +175,18 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String info = request.getPathInfo(); // to get parameters
             String[] splitInfo = info.split("/");
             String user = splitInfo[1];
-            
+
             GameAccessor accessor = new GameAccessor();
             int userId = accessor.UserExists(user);
             response.getWriter().println("{\"userId\":"+ userId + "}");
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class GetTopN extends HttpServlet
     {
@@ -190,23 +196,25 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String info = request.getPathInfo(); // to get parameters
             String[] splitInfo = info.split("/");
             int userId = Integer.parseInt(splitInfo[1]);
             int desGame = Integer.parseInt(splitInfo[2]);
             int n = Integer.parseInt(splitInfo[3]);
-            
+
             GameAccessor accessor = new GameAccessor();
-            List<CandidateGame> reccomendedGames = accessor.GetTopN(userId, desGame, n);
+            List<CandidateGame> recommendedGames = accessor.GetTopN(userId, desGame, n);
             List<Game> games = new ArrayList<Game>();
-            for(CandidateGame cd : reccomendedGames) {
+            for(CandidateGame cd : recommendedGames) {
+                accessor.LazyLoadGame(cd.game);
             	games.add(cd.game);
             }
             response.getWriter().println(GamesJson(games));
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class GetGameByName extends HttpServlet
     {
@@ -216,17 +224,18 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String name = request.getPathInfo(); // to get parameters
             System.out.println(name);
             name = name.substring(1, name.length());
             GameAccessor accessor = new GameAccessor();
             Game game = accessor.GetGameByName(name);
-            
+
             response.getWriter().println(game.toString());
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class GetAllGames extends HttpServlet
     {
@@ -236,16 +245,17 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
-           
+
             GameAccessor accessor = new GameAccessor();
             List<Game> games = accessor.GetAllGames();
 
-            
+
             response.getWriter().println(GamesJson(games));
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class GetProfileGames extends HttpServlet
     {
@@ -255,6 +265,7 @@ public class Handlers
                                                             IOException
         {
             response.setContentType("text/html");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
             String info = request.getPathInfo(); // to get parameters
             String[] splitInfo = info.split("/");

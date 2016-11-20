@@ -149,7 +149,7 @@ public class GameAccessor {
 		PreparedStatement stmt = null;
 		try {
 			
-			String query = "select * from user where username = ?";
+			String query = "select * from users where username = ?";
 			stmt = db.connection.prepareStatement(query);
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
@@ -253,11 +253,14 @@ public class GameAccessor {
 					desGame = game;
 				}
 			}
-//			
-//			query = "select * from games where id = ?;";
-//			stmt = db.connection.prepareStatement(query);
-//			stmt.setInt(1, userId);
-//			rs = stmt.executeQuery();
+
+			if (desGame == null) {
+				query = "select * from games where id = ?;";
+				stmt = db.connection.prepareStatement(query);
+				stmt.setInt(1, desId);
+				rs = stmt.executeQuery();
+				desGame = CreateGames(rs).get(0);
+			}
 
 
 			
@@ -275,35 +278,48 @@ public class GameAccessor {
 		
 		return null;
 	}
-	
+
+	/**
+	 * Eager loads everything except description and image_link for the 5000 top ranked games.
+	 * This is for SQL optimization - takes this procedure from over a minute to a second.
+	 * Returned to front end, if user clicks on a game lazy load the rest of it.
+	 * @return mixed
+	 */
 	public List<Game> GetAllGames() {
 		List<Game>games = null;
 		PreparedStatement stmt = null;
 		try {
+<<<<<<< HEAD
 			//order by gbg_overall_rank
 			String query = "select * from games order by gbg_overall_rank limit 5000";
+=======
+			
+			String query = "select id, title, year, avg_rating," +
+					" no_ratings, complexity, min_players, max_players, " +
+					"min_time, max_time, gbg_overall_rank from games order by gbg_overall_rank limit 5000";
+>>>>>>> 319cc74823b08e070cbe7c44a46c23653c77c2a9
 			stmt = db.connection.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
-			games = CreateGames(rs);
+			games = CreateSkinnyGames(rs);
 			db.safeClose(stmt);
-			
+
 			for(Iterator<Game> i = games.iterator(); i.hasNext(); ) {
-			    Game game = i.next();
-			    query = "select distinct(category) from categories where id = ? ";
+				Game game = i.next();
+				query = "select distinct(category) from categories where id = ? ";
 				stmt = db.connection.prepareStatement(query);
 				stmt.setInt(1, game.id);
 				rs = stmt.executeQuery();
 				game = AddCategoriesToGame(rs, game);
 				//System.out.println("Finished adding categories.");
-				
+
 				query = "select distinct(mechanic) from mechanics where id = ? ";
 				stmt = db.connection.prepareStatement(query);
 				stmt.setInt(1, game.id);
 				rs = stmt.executeQuery();
 				game = AddMechanicsToGame(rs, game);
 				//System.out.println("Finished adding mechanics.");
-				
-			    query = "select distinct(type) from types where id = ? ";
+
+				query = "select distinct(type) from types where id = ? ";
 				stmt = db.connection.prepareStatement(query);
 				stmt.setInt(1, game.id);
 				rs = stmt.executeQuery();
@@ -469,6 +485,64 @@ public class GameAccessor {
 			e.printStackTrace();
 		}
 		return games;
+	}
+
+	/**
+	 * Skinny games don't have description or image link, since those take too long to be indexed.
+	 * These fields must be loaded before being returned to the client.
+	 * @param rs
+	 * @return
+	 */
+	private List<Game> CreateSkinnyGames(ResultSet rs) {
+		List<Game> games = new ArrayList<Game>();
+		try {
+
+			while(rs.next()) {
+				Game game = new Game();
+				game.id = rs.getInt("id");
+				game.title = rs.getString("title");
+				game.avg_rating = rs.getFloat("avg_rating");
+				game.id = rs.getInt("id");
+				game.title = rs.getString("title");
+				game.year = rs.getInt("year");
+				game.avg_rating = rs.getFloat("avg_rating");
+				game.no_ratings = rs.getInt("no_ratings");
+				game.complexity = rs.getFloat("complexity");
+				game.min_players = rs.getInt("min_players");
+				game.max_players = rs.getInt("max_players");
+				game.min_time = rs.getInt("min_time");
+				game.max_time = rs.getInt("max_time");
+
+				games.add(game);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return games;
+	}
+
+	/**
+	 * Loads description and image_link and adds them to the game
+	 * @param game the game
+	 */
+	public void LazyLoadGame(Game game) {
+
+		PreparedStatement stmt = null;
+		try {
+			String query = "select description, image_link from games where id = ? ";
+			stmt = db.connection.prepareStatement(query);
+			stmt.setInt(1, game.id);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				game.description = rs.getString("description");
+				game.image_link = rs.getString("image_link");
+			}
+			db.safeClose(stmt);
+		}
+		catch (Exception e) {
+			db.safeClose(stmt);
+		}
 	}
 	
 	private Game AddCategoriesToGame(ResultSet rs, Game game) {

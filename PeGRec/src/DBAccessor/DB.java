@@ -5,23 +5,23 @@ import java.sql.*;
 public class DB {
 
 	public Connection connection = null;
-	
+
 	public DB() {
-		
+
 		try {
-			
+
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/BoardGames","root", "103191");
-		
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/Recommender","root", "root");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void safeClose(Connection con) {
 		if (con != null) {
 			try {con.close();}
@@ -30,7 +30,7 @@ public class DB {
 			}
 		}
 	}
-	
+
 	public void safeClose(Statement st) {
 		if (st != null) {
 			try {st.close();}
@@ -39,7 +39,7 @@ public class DB {
 			}
 		}
 	}
-	
+
 	public void safeClose (PreparedStatement cps) {
 		if (cps != null) {
 			try {cps.close();}
@@ -48,7 +48,7 @@ public class DB {
 			}
 		}
 	}
-	
+
 	public void safeClose(ResultSet crs) {
 		if (crs != null) {
 			try {crs.close();}

@@ -4,7 +4,7 @@ angular.module('recommender.game', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/game', {
-    templateUrl: 'game/game.html',
+    templateUrl: '../assets/DisplayRecs.html',
     controller: 'game'
   });
 }])
