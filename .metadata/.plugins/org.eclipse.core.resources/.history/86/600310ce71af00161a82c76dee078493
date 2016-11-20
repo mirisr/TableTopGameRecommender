@@ -19,7 +19,7 @@ public class TTGameRec {
 	
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 		
-		int person = 0;
+		int person = 10;
 		
 		TTGameRec rec = new TTGameRec();
 		Profile p = new Profile(accessor, person);

@@ -293,7 +293,7 @@ public class GameAccessor {
 			String query = "select * from games order by gbg_overall_rank limit 5000";
 			stmt = db.connection.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
-			games = CreateGames(rs);
+			games = CreateSkinnyGames(rs);
 			db.safeClose(stmt);
 
 			for(Iterator<Game> i = games.iterator(); i.hasNext(); ) {
