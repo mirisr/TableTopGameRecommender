@@ -289,8 +289,15 @@ public class GameAccessor {
 		List<Game>games = null;
 		PreparedStatement stmt = null;
 		try {
+<<<<<<< HEAD
 			//order by gbg_overall_rank
 			String query = "select * from games order by gbg_overall_rank limit 5000";
+=======
+			
+			String query = "select id, title, year, avg_rating," +
+					" no_ratings, complexity, min_players, max_players, " +
+					"min_time, max_time, gbg_overall_rank from games order by gbg_overall_rank limit 5000";
+>>>>>>> 319cc74823b08e070cbe7c44a46c23653c77c2a9
 			stmt = db.connection.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
 			games = CreateSkinnyGames(rs);
